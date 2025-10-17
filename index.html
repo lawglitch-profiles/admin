@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>Portfolio</title></head><body><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -633,7 +633,7 @@
     <nav class="navbar">
         <div class="nav-content">
             <div class="logo" id="navLogo">[[[Admin]]]</div>
-            <a href="#booking" class="nav-book-btn">[[[Schedule Consultation]]]</a>
+            <a href="#booking" class="nav-book-btn">[[[Book Consultation]]]</a>
         </div>
     </nav>
 
@@ -645,14 +645,14 @@
                 <img src="[[[assets/img1.png]]]" alt="Profile Picture" id="profileImage">
             </div>
             <h1 class="profile-name" id="profileName">[[[Admin]]]</h1>
-            <div class="profile-title" id="profileTitle">[[[Testing & support]]]</div>
-            <div class="profile-credentials" id="profileCred">[[[Fixing bugs and glitches]]]</div>
+            <div class="profile-title" id="profileTitle">[[[Testing & Support]]]</div>
+            <div class="profile-credentials" id="profileCred">[[[Fixing Bugs & providing support]]]</div>
             
             <div class="divider"></div>
             
             <div class="location-item">
                 <div class="location-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <span id="locationText">[[[India]]]</span>
+                <span id="locationText">[[[Location]]]</span>
             </div>
         </aside>
 
@@ -663,7 +663,7 @@
                     <h2 class="section-title">About</h2>
                 </div>
                 <p class="about-text" id="aboutContent">
-                    [[[Here for Support & Fixing Bugs]]]
+                    [[[Everything in this form is placeholder data for testing]]]
                 </p>
             </section>
 
@@ -675,7 +675,7 @@
                 <div class="expertise-grid" id="expertiseContainer">
                     <div class="expertise-card">
                         <div class="expertise-icon"><i class="fas fa-balance-scale"></i></div>
-                        <div class="expertise-name">[[[work #1]]]</div>
+                        <div class="expertise-name">[[[Practice Area 1]]]</div>
                         <div class="expertise-desc">[[[Description of your expertise in this area]]]</div>
                     </div>
                     <div class="expertise-card">
@@ -751,7 +751,7 @@
     <footer>
         <div class="footer-content">
             <a href="mailto:email@example.com" class="footer-email" id="footerEmail">
-                <i class="fas fa-envelope"></i> [[[support@lawglitch.in]]]
+                <i class="fas fa-envelope"></i> [[[suppor@.lawglitch.in]]]
             </a>
             <div class="footer-divider"></div>
             <p class="footer-text">&copy; <span id="footerYear"></span> <span id="footerName">[[[Admin]]]</span>. All Rights Reserved.</p>
@@ -877,11 +877,36 @@
         // Expose function globally for your form script
         window.populateTemplate = populateTemplate;
 
-        // Strip [[[...]]] markers from all text content on page load
+        // Strip [[[...]]] markers from all text content and image src attributes on page load
         (function stripMarkers() {
+            // Strip brackets from image src attributes
+            function stripImageMarkers() {
+                document.querySelectorAll('img[src*="[[["]').forEach(img => {
+                    const src = img.getAttribute('src');
+                    if (src && src.startsWith('[[[') && src.endsWith(']]]')) {
+                        // Strip the brackets, keep the path inside
+                        const cleanedSrc = src.slice(3, -3);
+                        img.setAttribute('src', cleanedSrc);
+                    }
+                });
+            }
+            
+            // Strip brackets from href attributes (links)
+            function stripLinkMarkers() {
+                document.querySelectorAll('a[href*="[[["]').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href.startsWith('[[[') && href.endsWith(']]]')) {
+                        // Strip the brackets, keep the path inside
+                        const cleanedHref = href.slice(3, -3);
+                        link.setAttribute('href', cleanedHref);
+                    }
+                });
+            }
+            
+            // Strip brackets from text content
             function processNode(node) {
                 if (node.nodeType === Node.TEXT_NODE) {
-                    // Replace [[[text]]] with just text
+                    // Replace [[[text]]] with just text (keep content, remove brackets)
                     if (node.textContent.includes('[[[')) {
                         node.textContent = node.textContent.replace(/\[\[\[(.*?)\]\]\]/g, '$1');
                     }
@@ -893,10 +918,15 @@
                 }
             }
             
-            // Process the entire body
+            // Process the entire body for text markers
             processNode(document.body);
+            
+            // Strip brackets from image src attributes
+            stripImageMarkers();
+            
+            // Strip brackets from link href attributes
+            stripLinkMarkers();
         })();
     </script>
 </body>
-</html></body>
-</html></body></html>
+</html>
